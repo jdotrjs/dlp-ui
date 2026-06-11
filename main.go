@@ -15,8 +15,8 @@ var assets embed.FS
 // It's a var so release builds can override it via
 // `-ldflags "-X main.Version=vX.Y.Z[-rcN]"` without editing the source.
 // var Version = "v0.0.0-rc0"
-var Version = "v0.0.0-rc0"
-var VersionName = "Oni"
+var Version = "dev"
+var VersionName = "dev"
 
 func main() {
 	// Create an instance of the app structure
