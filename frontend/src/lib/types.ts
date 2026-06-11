@@ -129,6 +129,10 @@ export type DownloadStatus = 'queued' | 'active' | 'completed' | 'failed' | 'can
 
 export const SETUP_EVENT = 'setup-progress';
 
+// UPDATE_STATUS_EVENT is the Wails channel the Go side emits an updater.Info on
+// after a successful CheckForUpdate (manual or the startup auto-check).
+export const UPDATE_STATUS_EVENT = 'update-status';
+
 export type SetupPhase =
   | 'start'
   | 'download'

@@ -9,6 +9,7 @@ import { TemplateField } from './TemplateField';
 import { RestrictNamesToggle } from './RestrictNamesToggle';
 import { PlaylistModeRadio } from './PlaylistModeRadio';
 import { MaxConcurrentField } from './MaxConcurrentField';
+import { UpdateSection } from './UpdateSection';
 
 // SettingsView loads the config, edits a local working copy, persists it via
 // SaveConfig, then re-runs ResolveBinaries to refresh the doctor status (per
@@ -148,6 +149,7 @@ export function SettingsView() {
         />
       </section>
 
+      <UpdateSection />
     </div>
   );
 }

@@ -21,12 +21,15 @@ import {
   ConfigPath,
   VendorDir,
   InstallDependency,
+  GetAppVersion,
+  GetUpdateStatus,
+  CheckForUpdate,
 } from '../../wailsjs/go/main/App';
 
 // The Go-side namespace is now `db` (it owns more than the library catalogue),
 // but existing frontend code imports the rows as `library.Content` etc. Alias
 // the namespace at this seam so the rename doesn't ripple through every view.
-export { config, binaries, db as library, ytdlp, download } from '../../wailsjs/go/models';
+export { config, binaries, db as library, ytdlp, download, updater } from '../../wailsjs/go/models';
 
 export {
   GetConfig,
@@ -47,4 +50,7 @@ export {
   ConfigPath,
   VendorDir,
   InstallDependency,
+  GetAppVersion,
+  GetUpdateStatus,
+  CheckForUpdate,
 };

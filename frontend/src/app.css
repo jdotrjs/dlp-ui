@@ -64,6 +64,7 @@ button {
 }
 
 .nav-item {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -91,6 +92,27 @@ button {
   width: 18px;
   text-align: center;
   font-size: 15px;
+}
+
+/* Subtle "update available" dot on the Settings nav item. Sits at the
+   trailing edge in expanded mode; floats to the icon's top-right when the
+   sidebar is collapsed so it stays visible alongside the icon. Deliberately
+   muted (no pulse, no red) — this nudge may live on the nav for a while. */
+.nav-update-dot {
+  margin-left: auto;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.85;
+  flex-shrink: 0;
+}
+
+.shell-collapsed .nav-update-dot {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  margin-left: 0;
 }
 
 .collapse-toggle {

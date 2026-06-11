@@ -11,6 +11,13 @@ import (
 //go:embed all:frontend/dist
 var assets embed.FS
 
+// Version is the app version surfaced to the UI and used for update checks.
+// It's a var so release builds can override it via
+// `-ldflags "-X main.Version=vX.Y.Z[-rcN]"` without editing the source.
+// var Version = "v0.0.0-rc0"
+var Version = "dev"
+var VersionName = "dev"
+
 func main() {
 	// Create an instance of the app structure
 	app := NewApp()

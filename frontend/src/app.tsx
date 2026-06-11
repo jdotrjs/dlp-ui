@@ -2,7 +2,7 @@ import './app.css';
 import { h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import { IsFirstRun } from './api/client';
-import { AppProvider } from './lib/AppContext';
+import { AppProvider, useApp } from './lib/AppContext';
 import { DownloadsTray } from './downloads/DownloadsTray';
 import { LibraryView } from './library/LibraryView';
 import { SettingsView } from './settings/SettingsView';
@@ -55,30 +55,12 @@ export function App() {
   return (
     <AppProvider>
     <div class={`shell ${collapsed ? 'shell-collapsed' : ''}`}>
-      <nav class="sidebar">
-        {!collapsed && <div class="sidebar-brand">ytdlp-ui</div>}
-        <ul class="nav-list">
-          {NAV_ITEMS.map((item) => (
-            <li key={item.route}>
-              <button
-                class={`nav-item ${route === item.route ? 'nav-item-active' : ''}`}
-                onClick={() => setRoute(item.route)}
-                title={item.label}
-              >
-                <span class="nav-icon">{item.icon}</span>
-                {!collapsed && <span class="nav-label">{item.label}</span>}
-              </button>
-            </li>
-          ))}
-        </ul>
-        <button
-          class="collapse-toggle"
-          onClick={() => setCollapsed((c) => !c)}
-          title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        >
-          {collapsed ? '»' : '«'}
-        </button>
-      </nav>
+      <Sidebar
+        route={route}
+        setRoute={setRoute}
+        collapsed={collapsed}
+        setCollapsed={setCollapsed}
+      />
 
       <main class="content">
         {route === 'library' ? <LibraryView /> : <SettingsView />}
@@ -89,5 +71,51 @@ export function App() {
       <DownloadsTray />
     </div>
     </AppProvider>
+  );
+}
+
+// Sidebar lives inside AppProvider so it can read updateStatus from context
+// and decorate the Settings nav item with a subtle update-available dot. The
+// dot is route-agnostic (visible whether or not Settings is the active view)
+// so an unacknowledged update keeps nudging the user even after they navigate
+// away.
+function Sidebar(props: {
+  route: Route;
+  setRoute: (r: Route) => void;
+  collapsed: boolean;
+  setCollapsed: (fn: (c: boolean) => boolean) => void;
+}) {
+  const { updateStatus } = useApp();
+  const updateAvailable = updateStatus?.updateAvailable ?? false;
+
+  return (
+    <nav class="sidebar">
+      {!props.collapsed && <div class="sidebar-brand">ytdlp-ui</div>}
+      <ul class="nav-list">
+        {NAV_ITEMS.map((item) => {
+          const showBadge = item.route === 'settings' && updateAvailable;
+          return (
+            <li key={item.route}>
+              <button
+                class={`nav-item ${props.route === item.route ? 'nav-item-active' : ''}`}
+                onClick={() => props.setRoute(item.route)}
+                title={showBadge ? `${item.label} (update available)` : item.label}
+              >
+                <span class="nav-icon">{item.icon}</span>
+                {!props.collapsed && <span class="nav-label">{item.label}</span>}
+                {showBadge && <span class="nav-update-dot" aria-label="update available" />}
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+      <button
+        class="collapse-toggle"
+        onClick={() => props.setCollapsed((c) => !c)}
+        title={props.collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+      >
+        {props.collapsed ? '»' : '«'}
+      </button>
+    </nav>
   );
 }

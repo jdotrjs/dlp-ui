@@ -4,11 +4,13 @@ import (
 	"context"
 	"errors"
 	"sync"
+	"time"
 
 	"ytdlp-gui/internal/binaries"
 	"ytdlp-gui/internal/config"
 	"ytdlp-gui/internal/db"
 	"ytdlp-gui/internal/download"
+	"ytdlp-gui/internal/updater"
 	"ytdlp-gui/internal/ytdlp"
 
 	wruntime "github.com/wailsapp/wails/v2/pkg/runtime"
@@ -151,6 +153,59 @@ func (a *App) startup(ctx context.Context) {
 	// Settings takes effect on the next restart (consistent with the existing
 	// config-change limitations).
 	a.downloads = download.New(a.store, runtimeEmitter{ctx: ctx}, ytdlp.Download, cfg.MaxConcurrent)
+
+	// Kick off an auto update-check off the main goroutine if the cached
+	// check is older than updateCheckInterval (or never). A small delay gives
+	// the frontend time to subscribe to UpdateStatusEvent before the result
+	// fires; if it misses the event the frontend's mount-time GetUpdateStatus
+	// still picks up the fresh state.
+	go a.maybeAutoUpdateCheck()
+}
+
+// maybeAutoUpdateCheck fires a background update check when the persisted
+// last-check timestamp is stale (or absent). Errors are logged, never
+// surfaced — the user can still trigger a manual check from Settings.
+func (a *App) maybeAutoUpdateCheck() {
+	// Brief delay so the frontend has a chance to subscribe before we emit.
+	time.Sleep(2 * time.Second)
+
+	cached := updater.Load(Version, a.metaStore())
+	if !cached.IsStale(updateCheckInterval) {
+		return
+	}
+	if _, err := a.CheckForUpdate(); err != nil {
+		wruntime.LogWarningf(a.ctx, "auto update check failed: %v", err)
+	}
+}
+
+// metaStore adapts the (possibly-nil) *db.Store into the small key/value
+// surface the updater package needs. Returning nil when the store failed to
+// open lets the updater silently skip persistence rather than crashing.
+func (a *App) metaStore() updater.Store {
+	if a.store == nil {
+		return nil
+	}
+	return metaStoreShim{a.store}
+}
+
+// metaStoreShim bridges db.Store.MetaGet/MetaSet to updater.Store. db.ErrNotFound
+// collapses to ok=false so the updater doesn't need to know the db package's
+// sentinel.
+type metaStoreShim struct{ s *db.Store }
+
+func (m metaStoreShim) Get(key string) (string, bool, error) {
+	e, err := m.s.MetaGet(key)
+	if errors.Is(err, db.ErrNotFound) {
+		return "", false, nil
+	}
+	if err != nil {
+		return "", false, err
+	}
+	return e.Value, true, nil
+}
+
+func (m metaStoreShim) Set(key, value string) error {
+	return m.s.MetaSet(key, value)
 }
 
 // shutdown is called by Wails when the app is closing. It cancels any in-flight

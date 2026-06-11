@@ -6,12 +6,14 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"time"
 	"ytdlp-gui/internal/binaries"
 	"ytdlp-gui/internal/config"
 	"ytdlp-gui/internal/db"
 	"ytdlp-gui/internal/download"
 	"ytdlp-gui/internal/install"
 	"ytdlp-gui/internal/paths"
+	"ytdlp-gui/internal/updater"
 	"ytdlp-gui/internal/ytdlp"
 
 	"github.com/pkg/browser"
@@ -22,6 +24,16 @@ import (
 // SetupEvent is the Wails event channel used by InstallDependency to stream
 // per-binary install progress to the welcome wizard.
 const SetupEvent = "setup-progress"
+
+// UpdateStatusEvent is emitted whenever the cached update status changes —
+// after the startup auto-check or a manual CheckForUpdate. The frontend
+// subscribes to refresh the Settings nav badge without re-polling.
+const UpdateStatusEvent = "update-status"
+
+// updateCheckInterval is the staleness threshold for the startup auto-check:
+// if the meta-stored last-check timestamp is older than this, we hit GitHub
+// again.
+const updateCheckInterval = 7 * 24 * time.Hour
 
 // GetConfig returns the current configuration for the Settings view.
 func (a *App) GetConfig() config.Config {
@@ -254,6 +266,33 @@ func (a *App) OpenInFolder(id int64) error {
 		return fmt.Errorf("content %d has no file on disk", id)
 	}
 	return revealInFolder(c.Filepath)
+}
+
+// ---- Update check ----
+
+// GetAppVersion returns the running app's version string (the package-level
+// Version var, overridable at build time via -ldflags).
+func (a *App) GetAppVersion() string {
+	return fmt.Sprintf("%s (%s)", VersionName, Version)
+}
+
+// GetUpdateStatus returns the cached update status without hitting the
+// network. The updater package handles the meta-store reads and derives
+// UpdateAvailable fresh against the running Version.
+func (a *App) GetUpdateStatus() updater.Info {
+	return updater.Load(Version, a.metaStore())
+}
+
+// CheckForUpdate hits GitHub now, persists the result via the meta store,
+// emits an update-status event, and returns the fresh Info. Network/parse
+// errors are returned as-is so the Settings UI can show them.
+func (a *App) CheckForUpdate() (updater.Info, error) {
+	info, err := updater.Check(a.ctx, Version, a.metaStore())
+	if err != nil {
+		return updater.Info{}, err
+	}
+	wruntime.EventsEmit(a.ctx, UpdateStatusEvent, info)
+	return info, nil
 }
 
 // GetThumbnailDataURL returns a `data:<mime>;base64,<bytes>` URL for the

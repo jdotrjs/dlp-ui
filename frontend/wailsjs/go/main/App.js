@@ -6,6 +6,10 @@ export function CancelDownload(arg1) {
   return window['go']['main']['App']['CancelDownload'](arg1);
 }
 
+export function CheckForUpdate() {
+  return window['go']['main']['App']['CheckForUpdate']();
+}
+
 export function ConfigPath() {
   return window['go']['main']['App']['ConfigPath']();
 }
@@ -18,6 +22,10 @@ export function FetchMetadata(arg1) {
   return window['go']['main']['App']['FetchMetadata'](arg1);
 }
 
+export function GetAppVersion() {
+  return window['go']['main']['App']['GetAppVersion']();
+}
+
 export function GetConfig() {
   return window['go']['main']['App']['GetConfig']();
 }
@@ -28,6 +36,10 @@ export function GetContent(arg1) {
 
 export function GetThumbnailDataURL(arg1) {
   return window['go']['main']['App']['GetThumbnailDataURL'](arg1);
+}
+
+export function GetUpdateStatus() {
+  return window['go']['main']['App']['GetUpdateStatus']();
 }
 
 export function InstallDependency(arg1) {

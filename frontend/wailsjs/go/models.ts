@@ -202,6 +202,31 @@ export namespace download {
 
 }
 
+export namespace updater {
+
+	export class Info {
+	    currentVersion: string;
+	    latestVersion: string;
+	    updateAvailable: boolean;
+	    lastCheckedAt: number;
+	    releaseUrl: string;
+
+	    static createFrom(source: any = {}) {
+	        return new Info(source);
+	    }
+
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.currentVersion = source["currentVersion"];
+	        this.latestVersion = source["latestVersion"];
+	        this.updateAvailable = source["updateAvailable"];
+	        this.lastCheckedAt = source["lastCheckedAt"];
+	        this.releaseUrl = source["releaseUrl"];
+	    }
+	}
+
+}
+
 export namespace ytdlp {
 	
 	export class Format {

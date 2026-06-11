@@ -95,3 +95,19 @@
 .status-source {
   color: var(--muted);
 }
+
+/* ---- Update section ---- */
+.update-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.update-current {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  padding: 4px 8px;
+  border-radius: 4px;
+}

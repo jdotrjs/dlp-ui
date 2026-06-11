@@ -7,7 +7,14 @@
 // downloads reducer. Keeping the runtime import behind this module mirrors how
 // client.ts hides the generated bindings.
 import { EventsOn } from '../../wailsjs/runtime/runtime';
-import { DOWNLOAD_EVENT, DownloadEvent, SETUP_EVENT, SetupProgress } from '../lib/types';
+import {
+  DOWNLOAD_EVENT,
+  DownloadEvent,
+  SETUP_EVENT,
+  SetupProgress,
+  UPDATE_STATUS_EVENT,
+} from '../lib/types';
+import { updater } from './client';
 
 // subscribeDownloads registers a listener on the 'download' channel and returns
 // the unsubscribe function (call it on cleanup). Wails delivers the emitted
@@ -30,6 +37,20 @@ export function subscribeSetup(
 ): () => void {
   return EventsOn(SETUP_EVENT, (payload: SetupProgress) => {
     if (payload && typeof payload.name === 'string') {
+      handler(payload);
+    }
+  });
+}
+
+// subscribeUpdateStatus registers a listener on the update-status channel and
+// returns the unsubscribe function. The Go side emits the channel after the
+// startup auto-check or a manual CheckForUpdate so the sidebar badge can
+// refresh without polling.
+export function subscribeUpdateStatus(
+  handler: (info: updater.Info) => void,
+): () => void {
+  return EventsOn(UPDATE_STATUS_EVENT, (payload: updater.Info) => {
+    if (payload && typeof payload.currentVersion === 'string') {
       handler(payload);
     }
   });

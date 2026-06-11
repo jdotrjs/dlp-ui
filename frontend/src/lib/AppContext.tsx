@@ -12,8 +12,16 @@ import {
   useRef,
   useState,
 } from 'preact/hooks';
-import { CancelDownload, GetConfig, ListContent, config, library } from '../api/client';
-import { subscribeDownloads } from '../api/events';
+import {
+  CancelDownload,
+  GetConfig,
+  GetUpdateStatus,
+  ListContent,
+  config,
+  library,
+  updater,
+} from '../api/client';
+import { subscribeDownloads, subscribeUpdateStatus } from '../api/events';
 import {
   SortBy,
   SortDir,
@@ -73,6 +81,17 @@ export interface AppState {
   cancelDownload: (id: string) => void;
   // clearDownload dismisses a settled download from the tray.
   clearDownload: (id: string) => void;
+
+  // --- Updates ---
+  //
+  // updateStatus is the latest known update state (running version + last-
+  // known latest release tag). It's loaded once on mount via GetUpdateStatus
+  // and refreshed by the Go-side `update-status` event after auto- or manual
+  // checks. setUpdateStatus lets Settings push a fresh Info into context
+  // immediately after CheckForUpdate resolves, so the nav badge updates
+  // before the event arrives.
+  updateStatus: updater.Info | null;
+  setUpdateStatus: (info: updater.Info) => void;
 }
 
 const Ctx = createContext<AppState | null>(null);
@@ -101,6 +120,10 @@ export function AppProvider({ children }: { children: ComponentChildren }) {
     () => new Map(),
   );
 
+  // updateStatus is null until GetUpdateStatus resolves; after that it's the
+  // last seen Info (mount-load OR event-pushed OR Settings-push).
+  const [updateStatus, setUpdateStatus] = useState<updater.Info | null>(null);
+
   // Load config once on mount.
   useEffect(() => {
     let alive = true;
@@ -109,6 +132,22 @@ export function AppProvider({ children }: { children: ComponentChildren }) {
       .catch(() => {});
     return () => {
       alive = false;
+    };
+  }, []);
+
+  // Load cached update status on mount + subscribe to background-check
+  // results. Done in its own effect so the GetConfig load isn't blocked on it.
+  useEffect(() => {
+    let alive = true;
+    GetUpdateStatus()
+      .then((info) => alive && setUpdateStatus(info))
+      .catch(() => {});
+    const unsub = subscribeUpdateStatus((info) => {
+      if (alive) setUpdateStatus(info);
+    });
+    return () => {
+      alive = false;
+      unsub();
     };
   }, []);
 
@@ -226,6 +265,8 @@ export function AppProvider({ children }: { children: ComponentChildren }) {
       enqueueDownload,
       cancelDownload,
       clearDownload,
+      updateStatus,
+      setUpdateStatus,
     }),
     [
       cfg,
@@ -243,6 +284,7 @@ export function AppProvider({ children }: { children: ComponentChildren }) {
       enqueueDownload,
       cancelDownload,
       clearDownload,
+      updateStatus,
     ],
   );
 
