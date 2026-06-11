@@ -39,11 +39,12 @@ const (
 // from a fresh comparison of CurrentVersion vs LatestVersion each time, so
 // upgrading the app naturally clears the badge without needing a stored flag.
 type Info struct {
-	CurrentVersion  string `json:"currentVersion"`
-	LatestVersion   string `json:"latestVersion"`
-	UpdateAvailable bool   `json:"updateAvailable"`
-	LastCheckedAt   int64  `json:"lastCheckedAt"`
-	ReleaseURL      string `json:"releaseUrl"`
+	CurrentVersionName string `json:"versionName"`
+	CurrentVersion     string `json:"currentVersion"`
+	LatestVersion      string `json:"latestVersion"`
+	UpdateAvailable    bool   `json:"updateAvailable"`
+	LastCheckedAt      int64  `json:"lastCheckedAt"`
+	ReleaseURL         string `json:"releaseUrl"`
 }
 
 // Store is the persistence seam used by Load/Check. It is intentionally a
@@ -64,8 +65,8 @@ type Store interface {
 // derives UpdateAvailable by comparing against currentVersion. Persistence
 // errors are swallowed (treated as "not cached") since the user can always
 // trigger a manual Check.
-func Load(currentVersion string, store Store) Info {
-	info := Info{CurrentVersion: currentVersion}
+func Load(currentVersion, name string, store Store) Info {
+	info := Info{CurrentVersionName: name, CurrentVersion: currentVersion}
 	if store == nil {
 		return info
 	}

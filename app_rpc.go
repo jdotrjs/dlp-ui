@@ -280,7 +280,7 @@ func (a *App) GetAppVersion() string {
 // network. The updater package handles the meta-store reads and derives
 // UpdateAvailable fresh against the running Version.
 func (a *App) GetUpdateStatus() updater.Info {
-	return updater.Load(Version, a.metaStore())
+	return updater.Load(Version, VersionName, a.metaStore())
 }
 
 // CheckForUpdate hits GitHub now, persists the result via the meta store,

@@ -203,20 +203,22 @@ export namespace download {
 }
 
 export namespace updater {
-
+	
 	export class Info {
+	    versionName: string;
 	    currentVersion: string;
 	    latestVersion: string;
 	    updateAvailable: boolean;
 	    lastCheckedAt: number;
 	    releaseUrl: string;
-
+	
 	    static createFrom(source: any = {}) {
 	        return new Info(source);
 	    }
-
+	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.versionName = source["versionName"];
 	        this.currentVersion = source["currentVersion"];
 	        this.latestVersion = source["latestVersion"];
 	        this.updateAvailable = source["updateAvailable"];

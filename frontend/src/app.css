@@ -15,6 +15,10 @@
   --bad: #e06464;
 }
 
+a {
+  color: var(--accent);
+}
+
 #app {
   height: 100vh;
   text-align: left;

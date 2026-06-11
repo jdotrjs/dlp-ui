@@ -72,7 +72,7 @@ func (m mapStore) Set(key, value string) error {
 }
 
 func TestLoadEmptyStore(t *testing.T) {
-	info := Load("v0.0.0-rc0", mapStore{})
+	info := Load("v0.0.0-rc0", "test", mapStore{})
 	if info.CurrentVersion != "v0.0.0-rc0" {
 		t.Errorf("CurrentVersion=%q", info.CurrentVersion)
 	}
@@ -82,7 +82,7 @@ func TestLoadEmptyStore(t *testing.T) {
 }
 
 func TestLoadNilStore(t *testing.T) {
-	info := Load("v0.0.0-rc0", nil)
+	info := Load("v0.0.0-rc0", "test", nil)
 	if info.CurrentVersion != "v0.0.0-rc0" {
 		t.Errorf("CurrentVersion=%q", info.CurrentVersion)
 	}
@@ -96,7 +96,7 @@ func TestLoadDerivesUpdateAvailable(t *testing.T) {
 		KeyLatestVersion: "v0.0.0-rc1",
 		KeyUpdateCheckTS: "1700000000",
 	}
-	info := Load("v0.0.0-rc0", s)
+	info := Load("v0.0.0-rc0", "test", s)
 	if !info.UpdateAvailable {
 		t.Errorf("expected UpdateAvailable=true; info=%+v", info)
 	}
@@ -147,8 +147,8 @@ func TestIsStale(t *testing.T) {
 		dur  time.Duration
 		want bool
 	}{
-		{0, time.Hour, true},                                // never checked
-		{now, time.Hour, false},                             // just checked
+		{0, time.Hour, true},    // never checked
+		{now, time.Hour, false}, // just checked
 		{now - int64((2 * time.Hour).Seconds()), time.Hour, true},
 	}
 	for _, c := range cases {

@@ -169,7 +169,7 @@ func (a *App) maybeAutoUpdateCheck() {
 	// Brief delay so the frontend has a chance to subscribe before we emit.
 	time.Sleep(2 * time.Second)
 
-	cached := updater.Load(Version, a.metaStore())
+	cached := updater.Load(Version, VersionName, a.metaStore())
 	if !cached.IsStale(updateCheckInterval) {
 		return
 	}

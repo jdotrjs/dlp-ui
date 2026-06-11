@@ -26,13 +26,23 @@ export function UpdateSection() {
     }
   }
 
+  console.log(updateStatus)
+  let versionName = updateStatus?.currentVersion;
+  if (updateStatus?.versionName) {
+    if (versionName) {
+      versionName = `${updateStatus?.versionName} (${versionName})`;
+    } else {
+      versionName = updateStatus.versionName;
+    }
+  }
+
   return (
     <section class="settings-section">
       <h2>About</h2>
       <div class="field">
         <label class="field-label">App version</label>
         <div class="update-row">
-          <span class="update-current">{updateStatus?.currentVersion ?? '…'}</span>
+          <span class="update-current">{versionName}</span>
           <button class="btn" onClick={check} disabled={checking}>
             {checking ? 'Checking…' : 'Check for updates'}
           </button>
