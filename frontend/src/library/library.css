@@ -1,0 +1,653 @@
+/* Library view: controls, content list/rows, fetch bar, fetch-preview modal,
+   and pager. Shared primitives (.view-header, .btn, .btn-link,
+   .muted, .spinner) live in app.css. */
+
+.library-controls {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin: 1em 0 1em;
+}
+
+.library-view {
+  padding: 20px 28px 48px;
+  max-width: 920px;
+}
+
+.library-header {
+  gap: 16px;
+}
+
+.library-header h1 {
+  font-size: 22px;
+  margin: 0;
+}
+
+/* SearchBar */
+.searchbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  max-width: 360px;
+}
+
+.searchbar-icon {
+  position: absolute;
+  left: 10px;
+  color: var(--muted);
+  font-size: 15px;
+  pointer-events: none;
+}
+
+.searchbar-input {
+  padding-left: 30px;
+}
+
+.searchbar-clear {
+  position: absolute;
+  right: 6px;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+.searchbar-clear:hover {
+  color: var(--text);
+}
+
+/* SortBar */
+.sortbar {
+  display: flex;
+  align-items: flex-end;
+}
+
+.sortbar-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+}
+
+.sortbar-label {
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding-right: 0.5em;
+  margin-left: 1em;
+}
+
+.sortbar-dir {
+  padding: 8px 12px;
+  align-content: stretch;
+}
+
+/* Keep the sort/source dropdowns from crowding the filter input. Width fits
+   "Downloaded" (the longest sort label) and typical source names. */
+.sortbar .rs-select {
+  width:  10em;
+  text-align: left;
+}
+
+/* Banners */
+.library-banner {
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.library-banner-error {
+  background: #e0646422;
+  border: 1px solid var(--bad);
+  color: #f0b3b3;
+}
+
+/* Content list */
+.content-list {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.content-empty {
+  padding: 28px 8px;
+  text-align: center;
+}
+
+.content-row {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-raised);
+}
+
+.content-list > :last-child .content-row,
+.content-row:last-child {
+  border-bottom: none;
+}
+
+.content-row:hover {
+  background: #2b3c54;
+}
+
+.content-row-expanded {
+  background: #2b3c54;
+}
+
+.content-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+  background: transparent;
+  border: none;
+  padding: 10px 12px;
+  cursor: pointer;
+  text-align: left;
+  min-width: 0;
+}
+
+.content-title {
+  font-size: 14px;
+  font-weight: 600;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.content-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--muted);
+  flex-wrap: wrap;
+}
+
+.content-uploader {
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.content-source {
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.content-pill {
+  border-radius: 10px;
+  padding: 1px 8px;
+  font-size: 11px;
+  text-transform: capitalize;
+}
+
+.pill-ok {
+  background: #4caf6e33;
+  color: var(--ok);
+}
+
+.pill-bad {
+  background: #e0646433;
+  color: var(--bad);
+}
+
+.pill-busy {
+  background: #4f8cf733;
+  color: var(--accent);
+}
+
+/* Clickable playlist badge on a row (filters the Library to that playlist). */
+.content-playlist-badge {
+  display: inline-flex;
+  align-items: center;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-radius: 10px;
+  padding: 1px 8px;
+  font-size: 11px;
+  background: #4f8cf722;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.content-playlist-badge:hover {
+  background: #4f8cf744;
+  text-decoration: underline;
+}
+
+/* Active playlist-filter chip (consistent with the SortBar filter UI). */
+.active-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: -6px 0 14px;
+  font-size: 12px;
+}
+
+.active-filter-label {
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.active-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 360px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-radius: 12px;
+  padding: 3px 6px 3px 10px;
+  background: #4f8cf722;
+  color: var(--accent);
+  border: 1px solid #4f8cf755;
+}
+
+.active-filter-clear {
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 2px;
+}
+
+.active-filter-clear:hover {
+  color: var(--text);
+}
+
+/* Playlist link inside the row's expanded detail panel. */
+.detail-playlist-link {
+  padding: 0;
+  font-size: 13px;
+}
+
+/* Actions menu */
+.content-actions {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-right: 6px;
+}
+
+.content-menu-btn {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.content-menu-btn:hover {
+  background: #ffffff14;
+  color: var(--text);
+}
+
+.menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+}
+
+.content-menu {
+  /* Fixed (not absolute) so it escapes the .content-list `overflow: hidden`
+     clip; anchored to the ⋯ button's rect via inline top/right from JS. */
+  position: fixed;
+  z-index: 11;
+  display: flex;
+  flex-direction: column;
+  min-width: 160px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px;
+  box-shadow: 0 8px 24px #00000060;
+}
+
+.content-menu button {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  text-align: left;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.content-menu button:hover {
+  background: #ffffff14;
+}
+
+.content-menu .menu-danger {
+  color: var(--bad);
+}
+
+/* Detail panel */
+.content-detail {
+  background: var(--bg-input);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px 16px;
+  align-items: start;
+}
+
+.content-list > :last-child .content-detail {
+  border-bottom: none;
+}
+
+/* Thumbnail sits to the left of the detail grid. width keeps it from
+ * dominating the row at very wide window sizes; the bytes themselves come
+ * straight from content_thumbnail via a data URL. */
+.content-thumb {
+  max-width: 200px;
+  max-height: 120px;
+  border-radius: 4px;
+  object-fit: cover;
+  display: block;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 16px;
+  margin: 0;
+  font-size: 13px;
+  text-align: left;
+}
+
+.detail-grid dt {
+  color: var(--muted);
+}
+
+.detail-grid dd {
+  margin: 0;
+  word-break: break-word;
+}
+
+.detail-path {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.detail-error {
+  color: var(--bad);
+}
+
+/* Pager */
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.pager-status {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ---- FetchBar ---- */
+.fetchbar {
+  margin: 14px 0 4px;
+}
+
+.fetchbar-row {
+  display: flex;
+  gap: 8px;
+}
+
+.fetchbar-input {
+  flex: 1;
+}
+
+.fetchbar-btn {
+  min-width: 110px;
+}
+
+.fetchbar-spinner-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fetchbar-error {
+  margin-top: 10px;
+}
+
+/* ---- Modal (fetch preview) ---- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: #00000088;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.modal {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 16px 48px #00000070;
+  width: 100%;
+  max-width: 560px;
+  max-height: 86vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-header h2 {
+  font-size: 16px;
+  margin: 0;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 6px;
+}
+
+.modal-close:hover {
+  color: var(--text);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px 18px;
+  border-top: 1px solid var(--border);
+}
+
+/* fetch preview head */
+.fetch-head {
+  display: flex;
+  gap: 14px;
+  padding: 16px 18px;
+}
+
+.fetch-thumb {
+  width: 120px;
+  height: 68px;
+  object-fit: cover;
+  border-radius: 6px;
+  background: var(--bg-input);
+  flex-shrink: 0;
+}
+
+.fetch-head-text {
+  min-width: 0;
+  gap: 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.fetch-subtitle {
+  display: flex;
+  flex-direction: row;
+  /* justify-content: space-between; */
+  gap: 0.5em;
+  width: 100%;
+}
+
+.fetch-title {
+  font-size: 15px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.fetch-count {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.fetch-uploader {
+  font-size: 13px;
+  color: var(--text);
+}
+
+.fetch-meta {
+  font-size: 12px;
+}
+
+.fetch-source {
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 11px;
+}
+
+/* fetch controls */
+.fetch-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1em;
+  padding: 0 18px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.fetch-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fetch-field-label {
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: left;
+}
+
+.fetch-format-select {
+  width: 100%;
+}
+
+.fetch-audio {
+  padding-bottom: 7px;
+}
+
+/* Format labels can be long ("137 · mp4 · 1920x1080 · 30fps · 53.4 MB"). */
+.fetch-field-format .rs-select {
+  min-width: 280px;
+  text-align: left;
+}
+
+/* playlist item list */
+.pl-list {
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  padding: 6px 10px;
+}
+
+.pl-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.pl-item:hover {
+  background: #ffffff10;
+}
+
+.pl-item-index {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+}
+
+.pl-item-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pl-item-duration {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+}
+
+.pl-selectall {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 18px;
+  border-top: 1px solid var(--border);
+}
+
+.pl-count {
+  font-size: 12px;
+}

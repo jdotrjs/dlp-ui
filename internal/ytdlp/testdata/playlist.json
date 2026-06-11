@@ -1,0 +1,35 @@
+{
+  "_type": "playlist",
+  "id": "PLexampleplaylistid",
+  "title": "Example Playlist",
+  "uploader": "Playlist Owner",
+  "extractor_key": "YoutubeTab",
+  "extractor": "youtube:tab",
+  "webpage_url": "https://www.youtube.com/playlist?list=PLexampleplaylistid",
+  "entries": [
+    {
+      "_type": "url",
+      "id": "vid000000001",
+      "title": "Item one",
+      "ie_key": "Youtube",
+      "duration": 241,
+      "url": "https://www.youtube.com/watch?v=vid000000001"
+    },
+    {
+      "_type": "url",
+      "id": "vid000000002",
+      "title": "Item two",
+      "ie_key": "Youtube",
+      "duration": 202,
+      "url": "https://www.youtube.com/watch?v=vid000000002"
+    },
+    {
+      "_type": "url",
+      "id": "vid000000003",
+      "title": "Item three",
+      "ie_key": "Youtube",
+      "duration": 310,
+      "url": "https://www.youtube.com/watch?v=vid000000003"
+    }
+  ]
+}

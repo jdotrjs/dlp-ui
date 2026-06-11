@@ -1,0 +1,97 @@
+/* Settings view. Shared primitives (.view-header, .text-input, .number-input,
+   .checkbox-row, .radio-row, .btn) live in app.css. */
+
+.settings-view {
+  padding: 20px 28px 48px;
+  max-width: 720px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.save-message {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.settings-section {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.settings-section h2 {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.field {
+  margin-bottom: 18px;
+}
+
+.field-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.field-hint {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.field-row {
+  display: flex;
+  gap: 8px;
+}
+
+.field-example {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+.field-example code {
+  background: var(--bg-input);
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: var(--text);
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+/* ---- Status badge ---- */
+.status {
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+.status-ok {
+  color: var(--ok);
+}
+
+.status-bad {
+  color: var(--bad);
+}
+
+.status-unknown {
+  color: var(--muted);
+}
+
+.status-source {
+  color: var(--muted);
+}

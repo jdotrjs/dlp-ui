@@ -1,0 +1,191 @@
+/* Welcome / first-run setup wizard. Full-screen panel that replaces the
+   app shell while a.firstRun is true. */
+
+.welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  padding: 24px;
+  box-sizing: border-box;
+  background: var(--bg);
+  overflow-y: auto;
+}
+
+.welcome-card {
+  width: 100%;
+  max-width: 640px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 28px 32px;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.welcome-card h1 {
+  font-size: 22px;
+  margin: 0 0 16px 0;
+  text-align: center;
+}
+
+.welcome-card h2 {
+  font-size: 16px;
+  margin: 18px 0 10px 0;
+}
+
+.welcome-card p {
+  font-size: 14px;
+  line-height: 1.55;
+  margin: 0 0 12px 0;
+}
+
+.welcome-steps {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.welcome-step {
+  width: 28px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+}
+
+.welcome-step.active {
+  background: var(--accent);
+}
+
+.welcome-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.welcome-actions .spacer {
+  flex: 1;
+}
+
+/* ---- Dependency table on screen 2 ---- */
+.deps-list {
+  list-style: none;
+  margin: 12px 0 0 0;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.deps-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.deps-row:last-child {
+  border-bottom: none;
+}
+
+.deps-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.deps-detail {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+  word-break: break-all;
+}
+
+.deps-status {
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.deps-status.ok {
+  color: var(--ok);
+}
+
+.deps-status.bad {
+  color: var(--bad);
+}
+
+.deps-status.pending {
+  color: var(--muted);
+}
+
+/* ---- Install progress panel (screen 2 expanded) ---- */
+.install-panel {
+  margin-top: 18px;
+  padding: 14px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.install-row {
+  margin-bottom: 12px;
+}
+
+.install-row:last-child {
+  margin-bottom: 0;
+}
+
+.install-row-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.install-row-phase {
+  color: var(--muted);
+}
+
+.install-bar {
+  height: 6px;
+  background: var(--bg-raised);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.install-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.18s ease;
+}
+
+.install-bar-fill.ok {
+  background: var(--ok);
+}
+
+.install-bar-fill.bad {
+  background: var(--bad);
+}
+
+.install-message {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+  word-break: break-all;
+}
+
+.welcome-path {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 8px;
+  display: inline-block;
+  word-break: break-all;
+}

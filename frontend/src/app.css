@@ -1,0 +1,340 @@
+/* Global theme, app shell, and shared UI primitives.
+   Feature-specific styles live alongside their views: library/library.css,
+   settings/settings.css, downloads/downloads.css. Dark theme consistent with
+   style.css (#1b2636-ish background already set on <html>). */
+
+:root {
+  --bg: #1b2636;
+  --bg-raised: #243349;
+  --bg-input: #0f1722;
+  --border: #36476090;
+  --text: #e6ecf3;
+  --muted: #8aa0b6;
+  --accent: #4f8cf7;
+  --ok: #4caf6e;
+  --bad: #e06464;
+}
+
+#app {
+  height: 100vh;
+  text-align: left;
+}
+
+/* Sidebar reuses the shared .btn from the input box below; keep buttons sane. */
+button {
+  font-family: inherit;
+  color: var(--text);
+}
+
+/* ---- Shell ---- */
+.shell {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 190px;
+  flex-shrink: 0;
+  background: var(--bg-raised);
+  border-right: 1px solid var(--border);
+  padding: 12px 8px;
+  box-sizing: border-box;
+  transition: width 0.12s ease;
+}
+
+.shell-collapsed .sidebar {
+  width: 56px;
+}
+
+.sidebar-brand {
+  font-weight: 700;
+  font-size: 15px;
+  padding: 6px 8px 14px;
+  color: var(--text);
+}
+
+.nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  padding: 9px 10px;
+  margin-bottom: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: left;
+}
+
+.nav-item:hover {
+  background: #ffffff14;
+}
+
+.nav-item-active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.nav-icon {
+  width: 18px;
+  text-align: center;
+  font-size: 15px;
+}
+
+.collapse-toggle {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.collapse-toggle:hover {
+  background: #ffffff14;
+}
+
+/* ---- Content ---- */
+.content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.view-pad {
+  padding: 24px;
+}
+
+/* Shared view header (Library + Settings). */
+.view-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.view-header h1 {
+  font-size: 22px;
+  margin: 0;
+}
+
+/* ---- Shared utilities ---- */
+.muted {
+  color: var(--muted);
+}
+
+/* ---- Shared form controls ---- */
+.text-input,
+.number-input {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 8px 10px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.text-input {
+  flex: 1;
+  width: 100%;
+}
+
+.number-input {
+  width: 90px;
+}
+
+.text-input:focus,
+.number-input:focus {
+  border-color: var(--accent);
+}
+
+/* ---- react-select (themed via classNamePrefix="rs") ----
+   Drives the look of the <Select> wrapper in lib/Select.tsx. Native <select>
+   is gone everywhere because macOS WebKit ignores most styling on it. */
+.rs-select {
+  font-size: 14px;
+}
+
+.rs__control {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  min-height: 34px;
+  cursor: pointer;
+  transition: border-color 0.1s ease;
+}
+
+.rs__control--is-focused {
+  border-color: var(--accent);
+}
+
+.rs__control--is-disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.rs__value-container {
+  padding: 2px 8px;
+  gap: 4px;
+}
+
+.rs__single-value,
+.rs__input-container,
+.rs__input {
+  color: var(--text);
+}
+
+.rs__placeholder {
+  color: var(--muted);
+}
+
+.rs__indicators {
+  align-self: stretch;
+}
+
+.rs__indicator-separator {
+  background: var(--border);
+  width: 1px;
+  margin: 6px 0;
+}
+
+.rs__dropdown-indicator,
+.rs__clear-indicator {
+  color: var(--muted);
+  padding: 0 6px;
+  display: flex;
+  align-items: center;
+}
+
+.rs__dropdown-indicator:hover,
+.rs__clear-indicator:hover {
+  color: var(--text);
+}
+
+.rs__menu {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-top: 4px;
+  box-shadow: 0 6px 18px #00000080;
+  overflow: hidden;
+  font-size: 14px;
+}
+
+.rs__menu-list {
+  padding: 4px;
+  max-height: 260px;
+}
+
+.rs__option {
+  padding: 7px 9px;
+  border-radius: 4px;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+}
+
+.rs__option--is-focused {
+  background: #ffffff14;
+}
+
+.rs__option--is-selected {
+  background: var(--accent);
+  color: #fff;
+}
+
+.rs__option--is-disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.rs__no-options-message {
+  color: var(--muted);
+  padding: 8px;
+  font-size: 13px;
+}
+
+.checkbox-row,
+.radio-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* ---- Buttons ---- */
+.btn {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  background: #2b3c54;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #3f7be0;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.btn-link {
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 13px;
+  padding: 2px 0;
+}
+
+.btn-link:hover {
+  text-decoration: underline;
+}
+
+/* ---- Spinner ---- */
+.spinner {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  border: 2px solid #ffffff66;
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+

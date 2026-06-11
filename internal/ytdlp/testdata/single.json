@@ -1,0 +1,47 @@
+{
+  "id": "dQw4w9WgXcQ",
+  "title": "Example Single Video",
+  "uploader": "Example Channel",
+  "channel": "Example Channel",
+  "extractor_key": "Youtube",
+  "extractor": "youtube",
+  "webpage_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+  "duration": 241,
+  "thumbnail": "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxres.jpg",
+  "thumbnails": [
+    { "url": "https://i.ytimg.com/vi/dQw4w9WgXcQ/default.jpg" },
+    { "url": "https://i.ytimg.com/vi/dQw4w9WgXcQ/hq720.jpg" }
+  ],
+  "formats": [
+    {
+      "format_id": "140",
+      "ext": "m4a",
+      "resolution": "audio only",
+      "fps": null,
+      "filesize": 3920000,
+      "vcodec": "none",
+      "acodec": "mp4a.40.2",
+      "format_note": "medium"
+    },
+    {
+      "format_id": "137",
+      "ext": "mp4",
+      "width": 1920,
+      "height": 1080,
+      "fps": 30,
+      "filesize_approx": 56000000,
+      "vcodec": "avc1.640028",
+      "acodec": "none",
+      "format_note": "1080p"
+    },
+    {
+      "format_id": "22",
+      "ext": "mp4",
+      "resolution": "1280x720",
+      "fps": 30,
+      "vcodec": "avc1.64001F",
+      "acodec": "mp4a.40.2",
+      "format_note": "720p"
+    }
+  ]
+}
