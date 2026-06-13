@@ -1,0 +1,20 @@
+- media playback
+- playlists
+- integrate dearrow api : https://wiki.sponsor.ajay.app/w/API_Docs/DeArrow
+- expand ytdlp flags config
+  - sponsor block
+  - other?
+- make settings page not suck
+  - enable dependency download here
+- auto-update yt-dlp
+- get video transcript
+  - external service?
+  - embed whisper?
+- curation
+  - video tagging
+  - auto tagging (all from $channel -> tech or whatever)
+  - search syntax e.g. `s:youtube c:"errant signal" imsim`
+- push search/filtering into backend
+- default & ranked preference to skip fetch screen
+  - carve-out for audio-only mode
+- ui styling not so shitty
